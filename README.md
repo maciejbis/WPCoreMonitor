@@ -1,0 +1,2 @@
+# wcom
+WP Core Monitor
