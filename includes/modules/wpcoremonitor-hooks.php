@@ -27,8 +27,8 @@ class WPCoreMonitor_Hooks {
 	}
 
 	/**
-     * Add quick links for "Plugins" admin dashboard
-     *
+	 * Add quick links for "Plugins" admin dashboard
+	 *
 	 * @param $links
 	 * @param $plugin_file_name
 	 * @param $plugin_data
@@ -44,8 +44,8 @@ class WPCoreMonitor_Hooks {
 
 		$links[] = sprintf( "<a href=\"%s\">%s</a>", esc_attr( $link_url ), __( 'Scan for hooks', 'wpcoremonitor' ) );
 
-        return $links;
-    }
+		return $links;
+	}
 
 	/**
 	 * Register tab for admin dashboard.
@@ -60,7 +60,7 @@ class WPCoreMonitor_Hooks {
 			'content_callback' => array( $this, 'tab_content' )
 		);
 
-        return $tabs;
+		return $tabs;
 	}
 
 	/**
@@ -70,54 +70,54 @@ class WPCoreMonitor_Hooks {
 	 */
 	public function tab_content() {
 		?>
-            <div id="wcom-hooks-scanner" class="wcom-hooks-scanner">
-                <h2><?php esc_html_e( 'Hooks Scanner', 'wpcoremonitor' ); ?></h2>
+        <div id="wcom-hooks-scanner" class="wcom-hooks-scanner">
+            <h2><?php esc_html_e( 'Hooks Scanner', 'wpcoremonitor' ); ?></h2>
 
-                <div class="wcom-hooks-scanner-header">
-                    <form id="wcom-hooks-scanner-controls" method="POST">
-                        <label for="dir-selector"><?php esc_html_e( 'Select plugin/theme:', 'wpcoremonitor' ); ?></label>
-                        <select name="dir-selector" id="dir-selector">
-				            <?php
-				            $plugins  = get_plugins();
-				            $themes   = wp_get_themes();
+            <div class="wcom-hooks-scanner-header">
+                <form id="wcom-hooks-scanner-controls" method="POST">
+                    <label for="dir-selector"><?php esc_html_e( 'Select plugin/theme:', 'wpcoremonitor' ); ?></label>
+                    <select name="dir-selector" id="dir-selector">
+						<?php
+						$plugins = get_plugins();
+						$themes  = wp_get_themes();
 
-				            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-				            $selected = ( ! empty( $_GET['dir-selector'] ) ) ? esc_attr( wp_unslash( $_GET['dir-selector'] ) ) : '';
+						// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+						$selected = ( ! empty( $_GET['dir-selector'] ) ) ? esc_attr( wp_unslash( $_GET['dir-selector'] ) ) : '';
 
-				            printf( '<optgroup label="%s">', esc_attr__( 'Plugins', 'wpcoremonitor' ) );
-				            foreach ( $plugins as $plugin_key => $this_plugin ) {
-					            $plugin_name = esc_attr( $this_plugin['Name'] );
-					            $plugin_key  = esc_attr( $plugin_key );
-					            echo sprintf( "\n\t<option data-type=\"plugin\" %s value=\"%s\">%s</option>", selected( $selected, $plugin_key, false ), esc_attr( $plugin_key ), esc_attr( $plugin_name ) );
-				            }
-				            echo '</optgroup>';
+						printf( '<optgroup label="%s">', esc_attr__( 'Plugins', 'wpcoremonitor' ) );
+						foreach ( $plugins as $plugin_key => $this_plugin ) {
+							$plugin_name = esc_attr( $this_plugin['Name'] );
+							$plugin_key  = esc_attr( $plugin_key );
+							echo sprintf( "\n\t<option data-type=\"plugin\" %s value=\"%s\">%s</option>", selected( $selected, $plugin_key, false ), esc_attr( $plugin_key ), esc_attr( $plugin_name ) );
+						}
+						echo '</optgroup>';
 
-				            printf( '<optgroup label="%s">', esc_attr__( 'Themes', 'wpcoremonitor' ) );
-				            foreach ( $themes as $theme_key => $this_theme ) {
-					            $theme_name = esc_attr( $this_theme['Name'] );
-					            $theme_key  = esc_attr( $theme_key );
-					            echo sprintf( "\n\t<option data-type=\"theme\" %s value=\"%s\">%s</option>", selected( $selected, $theme_key, false ), esc_attr( $theme_key ), esc_attr( $theme_name ) );
-				            }
-				            echo '</optgroup>';
+						printf( '<optgroup label="%s">', esc_attr__( 'Themes', 'wpcoremonitor' ) );
+						foreach ( $themes as $theme_key => $this_theme ) {
+							$theme_name = esc_attr( $this_theme['Name'] );
+							$theme_key  = esc_attr( $theme_key );
+							echo sprintf( "\n\t<option data-type=\"theme\" %s value=\"%s\">%s</option>", selected( $selected, $theme_key, false ), esc_attr( $theme_key ), esc_attr( $theme_name ) );
+						}
+						echo '</optgroup>';
 
-				            ?>
-                        </select>
-			            <?php submit_button( __( 'Start Scan', 'wpcoremonitor' ), 'primary', 'Start Scan', false, array( 'id' => 'start-scan' ) ); ?>
-                    </form>
+						?>
+                    </select>
+					<?php submit_button( __( 'Start Scan', 'wpcoremonitor' ), 'primary', 'Start Scan', false, array( 'id' => 'start-scan' ) ); ?>
+                </form>
 
-                    <div class="hooks-scanner-progress" style="display: none;">
-                        <div class="progress-bar">
-                            <div class="progress-bar-fill" style="width: 0"></div>
-                        </div>
-                        <div class="progress-text">0%</div>
+                <div class="hooks-scanner-progress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: 0"></div>
                     </div>
-                </div>
-
-                <div class="hooks-scanner-results" style="display: none;">
-                    <h2 class="hooks-scanner-heading">Found Hooks</h2>
-                    <div class="results-content"></div>
+                    <div class="progress-text">0%</div>
                 </div>
             </div>
+
+            <div class="hooks-scanner-results" style="display: none;">
+                <h2 class="hooks-scanner-heading">Found Hooks</h2>
+                <div class="results-content"></div>
+            </div>
+        </div>
 		<?php
 	}
 
@@ -143,7 +143,7 @@ class WPCoreMonitor_Hooks {
 				'type' => sanitize_text_field( wp_unslash( $_POST['scan_type'] ) )
 			);
 
-			$files     = $this->collect_php_files( $scan_meta['dir'], $scan_meta['type'] );
+			$files = $this->collect_php_files( $scan_meta['dir'], $scan_meta['type'] );
 			if ( $files === false ) {
 				wp_send_json_error( __( 'Plugin/theme files not found', 'wpcoremonitor' ) );
 			}
@@ -158,7 +158,7 @@ class WPCoreMonitor_Hooks {
 			set_transient( $scan_id . '_batches', $batches, HOUR_IN_SECONDS );
 			set_transient( $scan_id . '_meta', $scan_meta, HOUR_IN_SECONDS );
 		} else if ( isset( $_POST['batch_index'] ) && isset( $_POST['processed_files'] ) && isset( $_POST['total_files'] ) ) {
-			$scan_id     = sanitize_text_field( wp_unslash( $_POST['scan_id'] ) );
+			$scan_id = sanitize_text_field( wp_unslash( $_POST['scan_id'] ) );
 
 			$batch_index = intval( $_POST['batch_index'] );
 			$processed   = intval( $_POST['processed_files'] );
@@ -173,11 +173,11 @@ class WPCoreMonitor_Hooks {
 		}
 
 		if ( ! $batches || ! isset( $batches[ $batch_index ] ) || empty( $scan_meta['type'] ) || empty( $scan_meta['dir'] ) ) {
-			wp_send_json_error( __('Invalid batch', 'wpcoremonitor' ) );
+			wp_send_json_error( __( 'Invalid batch', 'wpcoremonitor' ) );
 		}
 
 		$batch_files = $batches[ $batch_index ];
-        $results = array();
+		$results     = array();
 
 		foreach ( $batch_files as $file ) {
 			$results[] = $this->scan_file( $file, $scan_meta['dir'], $scan_meta['type'] );
@@ -198,7 +198,7 @@ class WPCoreMonitor_Hooks {
 	 * Identify PHP files from the specified source theme/plugin directory.
 	 *
 	 * @param string $source_file Path to the plugin/theme.
-	 * @param string $scan_type   Type of scan (plugin|theme).
+	 * @param string $scan_type Type of scan (plugin|theme).
 	 *
 	 * @return array|false List of PHP files or false on failure.
 	 */
@@ -214,13 +214,12 @@ class WPCoreMonitor_Hooks {
 			return $files;
 		}
 
-        // Single plugin file
+		// Single plugin file
 		if ( ! empty( $source_path ) && strpos( $source_file, '/' ) === false ) {
 			if ( file_exists( $source_path ) && pathinfo( $source_path, PATHINFO_EXTENSION ) === 'php' ) {
 				$files[] = $source_path;
 			}
-		}
-        // Plugin/theme directory
+		} // Plugin/theme directory
         elseif ( is_dir( $source_dir ) ) {
 			try {
 				$iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $source_dir, FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS ), RecursiveIteratorIterator::SELF_FIRST );
