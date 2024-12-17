@@ -14,7 +14,7 @@ function customRedirect(count) {
     }
 }
 
-customRedirect(10); // Start the countdown
+customRedirect(20); // Start the countdown
 
 function stopRedirect() {
     clearTimeout(countdownInterval);

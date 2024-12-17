@@ -4,7 +4,7 @@
  * Plugin Name:       WP Core Monitor
  * Plugin URI:        https://wcom.pro?utm_source=plugin
  * Description:       A lightweight debug tool that monitors calls to the wp_redirect() function to determine which plugins or themes are using redirection.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Maciej Bis
  * Author URI:        http://maciejbis.net/
  * License:           GPL-2.0+
@@ -12,6 +12,9 @@
  * Text Domain:       wpcoremonitor
  */
 
+/**
+ * Main class
+ */
 class WPCoreMonitor {
 
 	/**
@@ -19,7 +22,7 @@ class WPCoreMonitor {
 	 *
 	 * @var string
 	 */
-	public $version = '0.9.0';
+	public $version = '1.1.0';
 
 	/**
 	 * The class instance
@@ -36,25 +39,21 @@ class WPCoreMonitor {
 	private $includes = [];
 
 	/**
-	 * Magic getter method.
+	 * The settings class instance
 	 *
-	 * @param string $prop
-	 *
-	 * @return mixed
+	 * @var WPCoreMonitor_Settings
 	 */
-	public function __get( $prop ) {
-		if ( array_key_exists( $prop, $this->includes ) ) {
-			return $this->includes[ $prop ];
-		} else if ( isset( $this->{$prop} ) ) {
-			return $this->{$prop};
-		} else {
-			return null;
-		}
-	}
-
+	public $settings = null;
 
 	/**
-	 * Retrieve main RankMath instance.
+	 * The helper class instance
+	 *
+	 * @var WPCoreMonitor_Helpers
+	 */
+	public $helpers = null;
+
+	/**
+	 * Retrieve main WPCoreMonitor instance.
 	 *
 	 * Ensure only one instance is loaded or can be loaded.
 	 *
@@ -81,6 +80,9 @@ class WPCoreMonitor {
 
 		// Localize the plugin
 		add_action( 'init', array( $this, 'localize_me' ), 1 );
+
+		$this->settings = $this->includes['settings'];
+		$this->helpers  = $this->includes['helpers'];
 	}
 
 	/**
@@ -100,10 +102,12 @@ class WPCoreMonitor {
 		$classes = array(
 			'core'    => array(
 				'helpers'  => 'WPCoreMonitor_Helpers',
-				'settings' => 'WPCoreMonitor_Settings'
+				'admin'    => 'WPCoreMonitor_Admin',
+				'settings' => 'WPCoreMonitor_Settings',
 			),
 			'modules' => array(
-				'redirects' => 'WPCoreMonitor_Redirects'
+				'redirects' => 'WPCoreMonitor_Redirects',
+				'hooks'     => 'WPCoreMonitor_Hooks'
 			)
 		);
 

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class WPCoreMonitor_Redirects
+ *
+ * Debug the WordPress-based redirects
+ */
 class WPCoreMonitor_Redirects {
 
 	public function __construct() {
@@ -46,10 +51,13 @@ class WPCoreMonitor_Redirects {
 
 		$html .= sprintf( '<p class="security-alert text-muted text-center">%s</p>', __( 'If you are an administrator, please disable <strong>WP Core Monitor</strong> plugin once you have completed troubleshooting the redirect.', 'wpcoremonitor' ) );
 
-		$html .= wp_core_monitor()->helpers->get_js_output();
-		$html .= wp_core_monitor()->helpers->get_css_output();
+		$html = sprintf( '<div class="wcom">%s</div>', $html );
+
+		$html .= wp_core_monitor()->helpers->get_js_output('wpcoremonitor-front');
+		$html .= wp_core_monitor()->helpers->get_css_output('wpcoremonitor-front');
 
 		// Output the HTML content
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		wp_die( $html, __( 'Redirecting...', 'wpcoremonitor' ), array( 'response' => $status ) );
 	}
 

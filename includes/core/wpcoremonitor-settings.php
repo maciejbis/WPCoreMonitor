@@ -13,12 +13,15 @@ class WPCoreMonitor_Settings {
 	protected $fields;
 
 	/**
-	 * Initialize the plugin.
+	 * The tab ID
+	 *
+	 * @var string
 	 */
+	private $tab_id = 'settings';
+
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+		add_filter( 'wpcoremonitor_admin_tabs', array( $this, 'register_tab' ), 100 );
 
 		// Define fields and their default values
 		$this->fields = array(
@@ -46,34 +49,12 @@ class WPCoreMonitor_Settings {
 	}
 
 	/**
-	 * Add settings page to the "Tools" section.
-	 */
-	public function add_settings_page() {
-		add_submenu_page( 'tools.php', __( 'WP Core Monitor', 'wpcoremonitor' ), __( 'WP Core Monitor', 'wpcoremonitor' ), 'manage_options', 'wpcoremonitor_settings', array( $this, 'settings_page_content' ) );
-	}
-
-	function enqueue_assets() {
-		$current_screen = get_current_screen();
-
-		// Check if we are on the 'tools_page_wpcoremonitor_settings' page
-		if ( $current_screen && $current_screen->id === 'tools_page_wpcoremonitor_settings' ) {
-			wp_enqueue_script( 'wp-element' );
-			wp_enqueue_script( 'wp-components' );
-			wp_enqueue_script( 'wp-editor' );
-			wp_enqueue_style( 'wp-components' );
-
-			wp_enqueue_script( 'wpcoremonitor-settings', WPCOREMONITOR_PLUGIN_URL . '/assets/wpcoremonitor-settings.js', array( 'wp-element', 'wp-components', 'wp-editor' ), WPCOREMONITOR_VER, true );
-			wp_enqueue_style( 'wpcoremonitor-settings', WPCOREMONITOR_PLUGIN_URL . '/assets/wpcoremonitor-settings.css' );
-		}
-	}
-
-	/**
 	 * Register plugin settings.
 	 */
 	public function register_settings() {
 		register_setting( 'wpcoremonitor_settings_group', 'wpcoremonitor_settings', array( $this, 'sanitize_settings' ) );
 
-		$this->add_settings_section( 'access_control', __( 'Access Control', 'wpcoremonitor' ) );
+		$this->add_settings_section( __( 'Access Control', 'wpcoremonitor' ) );
 
 		foreach ( $this->fields as $field_id => $field_info ) {
 			$this->add_settings_field( $field_id, $field_info['title'], $field_info['section'], array( 'id' => $field_id ) );
@@ -83,11 +64,10 @@ class WPCoreMonitor_Settings {
 	/**
 	 * Add settings section.
 	 *
-	 * @param string $section_id
 	 * @param string $title
 	 */
-	private function add_settings_section( $section_id, $title ) {
-		add_settings_section( $section_id, $title, '', 'wpcoremonitor_settings' );
+	private function add_settings_section( $title ) {
+		add_settings_section( 'access_control', $title, '', 'wpcoremonitor_settings' );
 	}
 
 	/**
@@ -143,12 +123,13 @@ class WPCoreMonitor_Settings {
 		$html .= '</select>';
 		$html .= ( ! empty( $field_info['description'] ) ) ? sprintf( '<p class="description">%s</p>', esc_html( $field_info['description'] ) ) : '';
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $html;
 	}
 
 	/**
-     * Checkbox field callback function.
-     *
+	 * Checkbox field callback function.
+	 *
 	 * @param string $field_id
 	 * @param string $value
 	 * @param $field_info
@@ -162,6 +143,7 @@ class WPCoreMonitor_Settings {
 		$html .= sprintf( '<input type="checkbox" id="%s" name="wpcoremonitor_settings[%s]" value="1" %s />', esc_attr( $field_id ), esc_attr( $field_id ), $checked );
 		$html .= ( ! empty( $field_info['description'] ) ) ? sprintf( '<p class="description">%s</p>', esc_html( $field_info['description'] ) ) : '';
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $html;
 	}
 
@@ -175,6 +157,7 @@ class WPCoreMonitor_Settings {
 		$html = sprintf( '<input type="text" id="%s" name="wpcoremonitor_settings[%s]" value="%s" />', esc_attr( $field_id ), esc_attr( $field_id ), esc_attr( $value ) );
 		$html .= ( ! empty( $field_info['description'] ) ) ? sprintf( '<p class="description">%s</p>', esc_html( $field_info['description'] ) ) : '';
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $html;
 	}
 
@@ -196,21 +179,30 @@ class WPCoreMonitor_Settings {
 	}
 
 	/**
+	 * Register tab for admin dashboard.
+	 *
+	 * @param $tabs
+	 *
+	 * @return void
+	 */
+	public function register_tab( $tabs ) {
+		$tabs[ $this->tab_id ] = array(
+			'title'            => __( 'Settings', 'wpcoremonitor' ),
+			'content_callback' => array( $this, 'tab_content' )
+		);
+
+		return $tabs;
+	}
+
+	/**
 	 * Display the settings page content.
 	 */
-	public function settings_page_content() {
-		?>
-        <div class="wrap">
-            <h2><?php echo sprintf( '%s', esc_html__( 'WP Core Monitor Settings', 'wpcoremonitor' ) ); ?></h2>
-            <form method="post" action="options.php">
-				<?php
-				settings_fields( 'wpcoremonitor_settings_group' );
-				do_settings_sections( 'wpcoremonitor_settings' );
-				submit_button();
-				?>
-            </form>
-        </div>
-		<?php
+	public function tab_content() {
+		echo sprintf( "<form method=\"post\" action=\"%s\">", esc_url( add_query_arg( 'tab', $this->tab_id, admin_url( 'options.php' ) ) ) );
+		settings_fields( 'wpcoremonitor_settings_group' );
+		do_settings_sections( 'wpcoremonitor_settings' );
+		submit_button();
+		echo '</form>';
 	}
 
 	/**
@@ -226,4 +218,5 @@ class WPCoreMonitor_Settings {
 		// Return the value from the settings array if it exists, otherwise return the default value
 		return isset( $settings[ $key ] ) ? $settings[ $key ] : $this->fields[ $key ]['default'];
 	}
+
 }

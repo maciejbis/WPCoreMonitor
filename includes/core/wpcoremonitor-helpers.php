@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class WPCoreMonitor_Helpers
+ */
 class WPCoreMonitor_Helpers {
 
 	/**
@@ -47,6 +50,7 @@ class WPCoreMonitor_Helpers {
 	 * @return string HTML table
 	 */
 	public function get_debug_backtrace_table() {
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
 		$backtrace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
 
 		if ( count( $backtrace ) > 4 ) {
@@ -154,7 +158,8 @@ class WPCoreMonitor_Helpers {
 		$js_file_path = sprintf( "%s/assets/%s.js", WPCOREMONITOR_PLUGIN_DIR, $file );
 
 		if ( file_exists( $js_file_path ) ) {
-			$js = sprintf( '<script>%s</script>', file_get_contents( $js_file_path ) );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$js = '<script>' . file_get_contents( $js_file_path ) . '</script>';
 		} else {
 			$js = '';
 		}
@@ -171,6 +176,7 @@ class WPCoreMonitor_Helpers {
 		$css_file_path = sprintf( "%s/assets/%s.css", WPCOREMONITOR_PLUGIN_DIR, $file );
 
 		if ( file_exists( $css_file_path ) ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$css = sprintf( '<style>%s</style>', file_get_contents( $css_file_path ) );
 		} else {
 			$css = '';
