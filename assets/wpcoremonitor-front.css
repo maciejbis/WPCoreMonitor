@@ -1,0 +1,5 @@
+.wcom .backtrace-table{width:100%; border-collapse:collapse; margin-top:10px; font-size:90%}
+.wcom .backtrace-table th, .wcom .backtrace-table td{border:1px solid #ddd; padding:8px; text-align:left}
+.wcom .backtrace-table th {background-color:#f2f2f2}
+.wcom .text-muted{color:#808080}
+.wcom .text-center{text-align:center}

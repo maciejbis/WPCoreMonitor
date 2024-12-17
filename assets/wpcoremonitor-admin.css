@@ -1,0 +1,16 @@
+.wcom .wcom-tab-content{display:none}
+.wcom .text-strong{font-weight:700}
+.wcom p{margin-right:0;padding:0}
+
+.wcom .wcom-hooks-scanner .wcom-hooks-scanner-header{display:flex;gap:15px;margin-top:.5em;align-items:stretch}
+.wcom .wcom-hooks-scanner .wcom-hooks-scanner-header .hooks-scanner-progress{flex-grow:1;min-width:0;position:relative}
+.wcom .wcom-hooks-scanner .wcom-hooks-scanner-header .hooks-scanner-progress .progress-text{position:absolute;top:50%;left:50%;text-align:center;width:80px;height:25px;line-height:25px;margin-top:-12.5px;margin-left:-40px;font-weight:700}
+.wcom .wcom-hooks-scanner .progress-bar{width:100%;height:100%;max-height:40px;background-color:#e5e5e5;border-radius:3px;margin:0}
+.wcom .wcom-hooks-scanner .progress-bar-fill{height:100%;background-color:#bebebe;border-radius:3px;transition:width .3s ease}
+.wcom .wcom-hooks-scanner .hooks-scanner-results .notice{margin-bottom:15px;padding:15px}
+.wcom .wcom-hooks-scanner .hooks-scanner-results .notice > *{margin-bottom:20px;margin-top:0}
+.wcom .wcom-hooks-scanner .hooks-scanner-results .notice > :last-child{margin-bottom:0}
+.wcom .wcom-hooks-scanner .hooks-scanner-results .notice .filename{margin-bottom:25px;margin-top:0;display:flex;align-items:center;gap:10px}
+.wcom .wcom-hooks-scanner .hooks-scanner-results .notice pre{display:flex;align-items:center}
+.wcom .wcom-hooks-scanner .hooks-scanner-results .notice pre,.wcom .wcom-hooks-scanner .hooks-scanner-results .notice code{font-size:11px}
+.wcom .wcom-hooks-scanner .hooks-scanner-results .notice pre span{min-width:75px}
