@@ -22,7 +22,12 @@ class WPCoreMonitor_Settings {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_filter( 'wpcoremonitor_admin_tabs', array( $this, 'register_tab' ), 100 );
+	}
 
+	/**
+	 * Register plugin settings.
+	 */
+	public function register_settings() {
 		// Define fields and their default values
 		$this->fields = array(
 			'debug_redirect_mode' => array(
@@ -46,12 +51,7 @@ class WPCoreMonitor_Settings {
 				),
 			)
 		);
-	}
 
-	/**
-	 * Register plugin settings.
-	 */
-	public function register_settings() {
 		register_setting( 'wpcoremonitor_settings_group', 'wpcoremonitor_settings', array( $this, 'sanitize_settings' ) );
 
 		$this->add_settings_section( __( 'Access Control', 'wpcoremonitor' ) );
